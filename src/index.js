@@ -5,14 +5,13 @@ import { createStore } from "redux";
 import { Provider } from "react-redux";
 import reducers from "./reducers";
 import middlewares from "./middlewares";
+import "semantic-ui-css/semantic.min.css";
 
 const store = createStore(reducers, middlewares);
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </React.StrictMode>,
+  <Provider store={store}>
+    <App />
+  </Provider>,
   document.getElementById("root")
 );
