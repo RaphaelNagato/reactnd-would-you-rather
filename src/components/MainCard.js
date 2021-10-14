@@ -1,29 +1,59 @@
 import React, { Component } from "react";
-import { Card, Image } from "semantic-ui-react";
-import QuestionDetail from "./QuestionDetail";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import { Card, Image, Button } from "semantic-ui-react";
 
 class MainCard extends Component {
   render() {
-    return (
-      <Card
-        style={{
-          width: "80%",
-        }}
-        centered
-      >
-        <Card.Content>
-          <Image
-            floated="right"
-            size="mini"
-            src="https://react.semantic-ui.com/images/avatar/large/steve.jpg"
-          />
-          <Card.Header>Steve Sanders Asks:</Card.Header>
-          <Card.Description>question ...</Card.Description>
-        </Card.Content>
-        <QuestionDetail />
-      </Card>
+    const { questions, kind, questionsIds, users } = this.props;
+    return questionsIds ? (
+      questionsIds.map((qId) => (
+        <Card
+          style={{
+            width: "80%",
+          }}
+          centered
+          key={qId}
+        >
+          <Card.Content>
+            <Image
+              src={users[questions[qId].author].avatarURL}
+              rounded
+              fluid
+              width="30"
+              height="30"
+            />
+            <Card.Header
+              style={{
+                paddingTop: "2em",
+              }}
+            >
+              {kind === "unanswered"
+                ? users[questions[qId].author].name + " Asks"
+                : "Asked by " + users[questions[qId].author].name}
+            </Card.Header>
+            <Card.Description>
+              {questions[qId].optionOne.text.substring(0, 20)}...
+            </Card.Description>
+          </Card.Content>
+          <Card.Content as={Link} to={`/questions/${qId}`}>
+            <Button color="teal">View Question</Button>
+          </Card.Content>
+        </Card>
+      ))
+    ) : (
+      <p>No data to display here</p>
     );
   }
 }
 
-export default MainCard;
+function mapStateToProps({ questions, users }, { kind, questionsIds }) {
+  return {
+    questions,
+    kind,
+    questionsIds,
+    users,
+  };
+}
+
+export default connect(mapStateToProps)(MainCard);

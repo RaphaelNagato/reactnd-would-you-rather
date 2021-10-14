@@ -1,31 +1,30 @@
 import React, { Component } from "react";
-import { Card, Button, Progress } from "semantic-ui-react";
+import { Container } from "semantic-ui-react";
+import AnsweredStatusDetail from "./AnsweredStatusDetail";
+import { connect } from "react-redux";
 import UnansweredQuestionDetail from "./UnansweredQuestionDetail";
-
-const AnsweredStatus = () => (
-  //TODO: show question results
-  <Card.Content>
-    <Card.Header>Results</Card.Header>
-    <div>
-      <p>Option One:</p>
-      <Progress percent={44} progress />
-    </div>
-    <div>
-      <p>Option Two:</p>
-      <Progress percent={44} progress />
-    </div>
-  </Card.Content>
-);
-
-const NotOpenedStatus = (props) => (
-  <Card.Content>
-    <Button color="teal">View Question</Button>
-  </Card.Content>
-);
 class QuestionDetail extends Component {
   render() {
-    return <AnsweredStatus />;
+    const { match, answeredQuestionsIds } = this.props;
+    const isAnswered = answeredQuestionsIds.includes(match.params.question_id);
+    return (
+      <Container centered="true">
+        {isAnswered ? (
+          <AnsweredStatusDetail id={match.params.question_id} />
+        ) : (
+          <UnansweredQuestionDetail id={match.params.question_id} />
+        )}
+      </Container>
+    );
   }
 }
 
-export default QuestionDetail;
+function mapStateToProps({ authUser, users }) {
+  const answeredQuestionsIds = Object.keys(users[authUser].answers);
+
+  return {
+    answeredQuestionsIds,
+  };
+}
+
+export default connect(mapStateToProps)(QuestionDetail);

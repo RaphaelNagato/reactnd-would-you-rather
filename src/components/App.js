@@ -6,7 +6,6 @@ import { handleInitialData } from "../actions/shared";
 import Home from "./Home";
 import Leaderboard from "./LeaderBoard";
 import LoginForm from "./LoginForm";
-import MainCard from "./MainCard";
 import NavBar from "./NavBar";
 import NewQuestion from "./NewQuestion";
 import QuestionDetail from "./QuestionDetail";

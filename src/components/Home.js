@@ -1,13 +1,14 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Container, Tab } from "semantic-ui-react";
 import MainCard from "./MainCard";
 
-const panes = [
+const panes = ({ answeredQuestionsIds, unansweredQuestionsIds }) => [
   {
     menuItem: "Unanswered Questions",
     render: () => (
       <Tab.Pane attached={false}>
-        <MainCard />
+        <MainCard kind={"unanswered"} questionsIds={unansweredQuestionsIds} />
       </Tab.Pane>
     ),
   },
@@ -15,7 +16,7 @@ const panes = [
     menuItem: "Answered Questions",
     render: () => (
       <Tab.Pane attached={false}>
-        <MainCard />
+        <MainCard kind={"answered"} questionsIds={answeredQuestionsIds} />
       </Tab.Pane>
     ),
   },
@@ -23,6 +24,7 @@ const panes = [
 
 class Home extends React.Component {
   render() {
+    const { answeredQuestionsIds, unansweredQuestionsIds } = this.props;
     return (
       <Container
         textAlign="center"
@@ -37,11 +39,25 @@ class Home extends React.Component {
             secondary: true,
             color: "teal",
           }}
-          panes={panes}
+          panes={panes({ answeredQuestionsIds, unansweredQuestionsIds })}
         />
       </Container>
     );
   }
 }
 
-export default Home;
+function mapStateToProps({ users, questions, authUser }) {
+  const answeredQuestionsIds = Object.keys(users[authUser].answers).sort(
+    (a, b) => questions[b].timestamp - questions[a].timestamp
+  );
+  const unansweredQuestionsIds = Object.keys(questions)
+    .filter((q) => !answeredQuestionsIds.includes(q))
+    .sort((a, b) => questions[b].timestamp - questions[a].timestamp);
+
+  return {
+    answeredQuestionsIds,
+    unansweredQuestionsIds,
+  };
+}
+
+export default connect(mapStateToProps)(Home);
