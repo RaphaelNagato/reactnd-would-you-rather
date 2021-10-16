@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 import { Form, Button, Grid, Segment, Header } from "semantic-ui-react";
 import { handleNewQuestion } from "../actions/questions";
 
@@ -7,6 +8,7 @@ class NewQuestion extends Component {
   state = {
     optionOne: "",
     optionTwo: "",
+    toHome: false,
   };
 
   handleChange = (e) => {
@@ -28,6 +30,7 @@ class NewQuestion extends Component {
     this.setState(() => ({
       optionOne: "",
       optionTwo: "",
+      toHome: true,
     }));
 
     return dispatch(handleNewQuestion(optionOne, optionTwo));
@@ -37,7 +40,9 @@ class NewQuestion extends Component {
     return str === null || /^\s*$/.test(str);
   };
   render() {
-    const { optionOne, optionTwo } = this.state;
+    const { optionOne, optionTwo, toHome } = this.state;
+
+    if (toHome) return <Redirect to="/" />;
     return (
       <Grid
         textAlign="center"

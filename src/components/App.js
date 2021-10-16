@@ -1,6 +1,7 @@
+import NotFound from "./NotFound";
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 import { handleInitialData } from "../actions/shared";
 import Home from "./Home";
@@ -22,14 +23,17 @@ class App extends Component {
           <NavBar />
           {authUser ? (
             <Fragment>
-              <Route path="/" exact component={Home} />
-              <Route path="/add" exact component={NewQuestion} />
-              <Route path="/leaderboard" exact component={Leaderboard} />
-              <Route
-                path="/questions/:question_id"
-                exact
-                component={QuestionDetail}
-              />
+              <Switch>
+                <Route path="/" exact component={Home} />
+                <Route path="/add" exact component={NewQuestion} />
+                <Route path="/leaderboard" exact component={Leaderboard} />
+                <Route
+                  path="/questions/:question_id"
+                  exact
+                  component={QuestionDetail}
+                />
+                <Route component={NotFound} />
+              </Switch>
             </Fragment>
           ) : (
             <LoginForm />
