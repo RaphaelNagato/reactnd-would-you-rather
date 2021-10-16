@@ -19,9 +19,7 @@ class MainCard extends Component {
             <Image
               src={users[questions[qId].author].avatarURL}
               rounded
-              fluid
-              width="30"
-              height="30"
+              size="small"
             />
             <Card.Header
               style={{
