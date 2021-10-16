@@ -1,3 +1,4 @@
+import { CREATE_NEW_QUESTION } from "../actions/questions";
 import { ADD_ANSWER_TO_USER, GET_USERS } from "../actions/users";
 
 export default function users(state = {}, action) {
@@ -18,6 +19,16 @@ export default function users(state = {}, action) {
             ...state[authUser].answers,
             [qid]: answer,
           },
+        },
+      };
+    case CREATE_NEW_QUESTION:
+      return {
+        ...state,
+        [action.question.author]: {
+          ...state[action.question.author],
+          questions: state[action.question.author].questions.concat([
+            action.question.id,
+          ]),
         },
       };
 
